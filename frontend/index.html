@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lipid Electrophoresis Classifier</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>Lipid Electrophoresis Classifier</h1>
+
+  <section>
+    <h2>Upload scan</h2>
+    <input type="file" id="scanInput" accept="image/*" capture="environment">
+    <button onclick="uploadOne()">Upload scan</button>
+  </section>
+
+  <section>
+    <h2>Manual feature entry</h2>
+
+    <label><input type="checkbox" id="origin_peak"> Chylomicron/origin band increased</label>
+    <label><input type="checkbox" id="beta_increased"> Beta/LDL band increased</label>
+    <label><input type="checkbox" id="prebeta_increased"> Pre-beta/VLDL band increased</label>
+    <label><input type="checkbox" id="broad_beta"> Broad beta band</label>
+    <label><input type="checkbox" id="lpx_suspected"> Lipoprotein X suspected</label>
+    <label><input type="checkbox" id="sample_quality_issue"> Poor quality / aged / unsuitable scan</label>
+
+    <button onclick="classifyManual()">Classify</button>
+  </section>
+
+  <section>
+    <h2>Result</h2>
+    <pre id="resultBox"></pre>
+  </section>
+
+  <section>
+    <h2>Save confirmed label</h2>
+
+    <select id="confirmed_classification">
+      <option>Normal</option>
+      <option>Type I</option>
+      <option>Type IIa</option>
+      <option>Type IIb</option>
+      <option>Type III</option>
+      <option>Type IV</option>
+      <option>Type V</option>
+      <option>Lipoprotein X suspected</option>
+      <option>Poor quality / repeat recommended</option>
+      <option>Unclassified</option>
+    </select>
+
+    <textarea id="comments" placeholder="Comments"></textarea>
+    <button onclick="saveLabel()">Save label</button>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
