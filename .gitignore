@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+data/uploads/
+data/labels.csv
+data/features.csv
+.venv/
