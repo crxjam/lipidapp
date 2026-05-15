@@ -15,16 +15,21 @@
   </section>
 
   <section>
-    <h2>Manual feature entry</h2>
-
-    <label><input type="checkbox" id="origin_peak"> Chylomicron/origin band increased</label>
-    <label><input type="checkbox" id="beta_increased"> Beta/LDL band increased</label>
-    <label><input type="checkbox" id="prebeta_increased"> Pre-beta/VLDL band increased</label>
-    <label><input type="checkbox" id="broad_beta"> Broad beta band</label>
-    <label><input type="checkbox" id="lpx_suspected"> Lipoprotein X suspected</label>
-    <label><input type="checkbox" id="sample_quality_issue"> Poor quality / aged / unsuitable scan</label>
-
-    <button onclick="classifyManual()">Classify</button>
+    <h2>Biochemistry values</h2>
+  
+    <label>Total cholesterol mmol/L</label>
+    <input type="number" id="total_cholesterol" step="0.1">
+  
+    <label>Triglycerides mmol/L</label>
+    <input type="number" id="triglycerides" step="0.1">
+  
+    <label>HDL-C mmol/L</label>
+    <input type="number" id="hdl" step="0.1">
+  
+    <label>LDL-C mmol/L optional</label>
+    <input type="number" id="ldl" step="0.1">
+  
+    <button onclick="classifyBiochemistry()">Classify from biochemistry</button>
   </section>
 
   <section>
