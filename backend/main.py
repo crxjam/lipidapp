@@ -20,15 +20,56 @@ app.add_middleware(
 )
 
 
-class ManualFeatures(BaseModel):
+class BiochemistryInput(BaseModel):
     filename: str = ""
-    origin_peak: bool = False
-    beta_increased: bool = False
-    prebeta_increased: bool = False
-    broad_beta: bool = False
-    lpx_suspected: bool = False
-    sample_quality_issue: bool = False
-    alpha_visible: bool = True
+    total_cholesterol: float
+    triglycerides: float
+    hdl: float
+    ldl: float | None = None
+
+
+@app.post("/classify-biochemistry")
+def classify_biochemistry(values: BiochemistryInput):
+    tc = values.total_cholesterol
+    tg = values.triglycerides
+    hdl = values.hdl
+    ldl = values.ldl
+
+    non_hdl = tc - hdl
+
+    reasons = []
+
+    if tg >= 10:
+        classification = "Severe hypertriglyceridaemia pattern — correlate with chylomicrons/VLDL on electrophoresis"
+        reasons.append("Triglycerides are severely increased.")
+    elif ldl is not None and ldl >= 5 and tg < 2.3:
+        classification = "Possible Type IIa pattern"
+        reasons.append("LDL-C is markedly increased with triglycerides not markedly increased.")
+    elif ldl is not None and ldl >= 5 and tg >= 2.3:
+        classification = "Possible Type IIb pattern"
+        reasons.append("LDL-C and triglycerides are both increased.")
+    elif tg >= 2.3 and non_hdl > 4:
+        classification = "Possible Type IV or Type IIb pattern"
+        reasons.append("Triglycerides and non-HDL cholesterol are increased.")
+    elif tg >= 2.3:
+        classification = "Possible Type IV pattern"
+        reasons.append("Triglycerides are increased, suggesting increased VLDL.")
+    else:
+        classification = "No clear biochemical Fredrickson pattern"
+        reasons.append("Biochemistry alone does not show a clear major hyperlipoproteinaemia pattern.")
+
+    return {
+        "input": values.dict(),
+        "calculated": {
+            "non_hdl_cholesterol": round(non_hdl, 2)
+        },
+        "result": {
+            "classification": classification,
+            "confidence": "low to moderate",
+            "reasons": reasons,
+            "important_note": "Biochemistry alone should not replace electrophoresis pattern recognition. Final classification should use the gel/densitometry pattern."
+        }
+    }
 
 
 class LabelRecord(ManualFeatures):
